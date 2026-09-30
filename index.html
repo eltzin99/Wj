@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>잔소리 (하나부터 열까지 다 널 위한 소리)</title>
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&family=Jua&display=swap" rel="stylesheet">
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);--bg:#eef3fb;--ink:#1d2b4f;--card:#fff;--line:#cfd9ea;--acc:#5b6bd6;--good:#1f8f68;--goodbg:#dcf5ea;--bad:#c0394b}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#111a33;--ink:#eaf1ff;--card:#1c2c52;--line:#33476f;--goodbg:#15402f;--acc:#8b98ff}}
+:root[data-theme="dark"]{--bg:#111a33;--ink:#eaf1ff;--card:#1c2c52;--line:#33476f;--goodbg:#15402f;--acc:#8b98ff}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.6 "Gowun Dodum","Apple SD Gothic Neo","Malgun Gothic",sans-serif}
+.w{max-width:520px;margin:0 auto;padding:16px}
+.sky{position:relative;height:190px;border-radius:20px;display:grid;place-items:center;font-size:84px}
+.tag{position:absolute;left:12px;top:12px;font:15px "Jua",sans-serif;background:rgba(255,255,255,.88);color:#1d2b4f;padding:2px 12px;border-radius:99px}
+.who{position:absolute;left:14px;bottom:-26px;width:64px;height:64px;border-radius:50%;background:var(--card);border:3px solid var(--acc);display:grid;place-items:center;font-size:34px}
+.meta{display:flex;justify-content:flex-end;align-items:center;gap:8px;height:42px;font-size:15px}
+.bar{width:120px;height:10px;border-radius:9px;background:var(--line);overflow:hidden}
+.bar i{display:block;height:100%;background:var(--acc);transition:width .4s}
+.box{background:var(--card);border:2px solid var(--line);border-radius:16px;padding:14px 16px;overflow:hidden}
+.name{font:19px "Jua",sans-serif;color:var(--acc)}
+.box p{margin:4px 0 0}
+.ch,.nx{font:inherit;color:inherit;cursor:pointer}
+.ch{display:block;width:100%;text-align:left;margin-top:10px;padding:12px 14px;border-radius:12px;border:2px solid var(--line);background:var(--card)}
+.ch:hover:not(:disabled){border-color:var(--acc)}
+.ch.best{border-color:var(--good);background:var(--goodbg)}
+.ch.pick:not(.best){border-color:var(--bad)}
+.nx{margin-top:12px;padding:10px 20px;border-radius:99px;border:0;background:var(--acc);color:#fff;font-family:"Jua",sans-serif;font-size:17px}
+.r{float:right}
+.ch:focus-visible,.nx:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+h1{font:34px/1.2 "Jua",sans-serif;margin:10px 0 0}
+h2{font:26px "Jua",sans-serif;margin:4px 0 0}
+.sub{margin:2px 0 0;opacity:.8}
+</style></head>
+<body><div id="app"></div>
+<script>
+const S=[
+{t:'기온 · 높은 날',e:'🥵',bg:['#ffe0a8','#ff9a6b'],k:0,q:'{P}, 오늘 35도래요! 그래도 두꺼운 후드티 입고 축구할래요~',c:[['얇고 시원한 옷 입어! 땀 많이 나니까 물통 챙겨서 자주 마셔야 열사병 안 걸려.',2],['더우니까 그늘에서 놀아. 물도 마시고!',1],['누가 그렇게 입으래! 그냥 시키는 대로 해!',0]],f:'기온이 높은 날엔 땀을 많이 흘려 탈수와 열사병이 생기기 쉬워요. 얇은 옷, 그늘, 물 마시기가 좋아요.'},
+{t:'기온 · 낮은 날',e:'🥶',bg:['#d6ecff','#9ec5f0'],k:1,q:'영하 5도라는데 저 반팔로 학교 갈래요. 안 추워요!',c:[['안 춥긴! 체온이 떨어지면 감기 걸려. 외투 입고 장갑이랑 목도리도 하고 가.',2],['춥다니까 겉옷 하나는 걸치고 가.',1],['감기 걸려도 몰라! 알아서 해!',0]],f:'기온이 낮은 날엔 체온이 떨어져 감기와 동상에 걸리기 쉬워요. 여러 겹 껴입고 장갑과 목도리를 해요.'},
+{t:'습도 · 높은 날',e:'💧',bg:['#cfe3e8','#8fb3c0'],k:0,q:'장마라서 방이 눅눅해요. 젖은 양말은 그냥 침대 밑에 넣어 둘래요.',c:[['안 돼! 습하면 곰팡이가 생겨. 창문 열어 환기하고 빨래는 제습기 켜고 말려.',2],['양말은 방에 널어 둬. 곧 마르겠지.',1],['방 좀 치워라! 맨날 왜 그 모양이야!',0]],f:'습도가 높으면 곰팡이가 생기고 음식이 쉽게 상하며 빨래가 잘 안 말라요. 환기와 제습이 필요해요.'},
+{t:'습도 · 낮은 날',e:'🏜️',bg:['#fde7c0','#e9b872'],k:1,q:'입술이 다 터요… 물 마시기도 귀찮아요.',c:[['건조해서 그래. 물 자주 마시고 립밤 바르고, 방에는 가습기 틀어 줄게.',2],['좀 참아 봐. 곧 괜찮아질 거야.',1],['그러게 평소에 내 말을 들었어야지!',0]],f:'습도가 낮으면 피부와 목이 건조해지고 산불이 나기 쉬워요. 물, 보습, 가습기, 그리고 불조심!'},
+{t:'바람 · 강한 날',e:'🌬️',bg:['#d5e4f7','#8da8cf'],k:0,q:'태풍인데 우산 쓰고 놀이터 갈래요! 바람 세게 부는 거 재밌어요!',c:[['위험해! 강풍엔 간판이나 나뭇가지가 날아올 수 있어. 오늘은 집에서 놀자.',2],['큰 우산 쓰고 금방만 다녀와.',1],['또 나간다고? {P} 속 터져 정말!',0]],f:'바람이 강한 날엔 간판이나 나뭇가지가 떨어질 수 있어요. 가능하면 밖에 나가지 않는 게 안전해요.'},
+{t:'바람 · 약한 날',e:'😶‍🌫️',bg:['#e6e2d8','#b9b3a3'],k:1,q:'오늘은 바람도 없고 좋네요. 운동장에서 한 시간 달릴래요!',c:[['미세먼지가 흩어지지 않고 쌓였대. 마스크 쓰고 오늘은 실내에서 운동해.',2],['너무 오래는 말고 조금만 하고 와.',1],['좀 가만히 앉아 있어라! 정신없게!',0]],f:'바람이 약하면 미세먼지가 흩어지지 않고 쌓일 수 있어요. 마스크를 쓰고 실내 활동을 해요.'},
+{t:'구름 · 많은 날',e:'☁️',bg:['#dfe5ec','#aab6c6'],k:0,q:'구름이 많아도 비는 안 올 거예요. 우산은 필요 없어요!',c:[['구름이 많으면 비가 올 수 있어. 우산 챙기고 빨래는 안에서 말리자.',2],['혹시 모르니 우산은 가방에 넣어 가.',1],['넌 왜 맨날 네 맘대로야!',0]],f:'구름이 많으면 햇빛이 줄어 빨래가 잘 안 마르고, 비가 올 수도 있어요. 낮 기온도 덜 올라요.'},
+{t:'구름 · 적은 날',e:'☀️',bg:['#bfe6ff','#ffe58f'],k:1,q:'완전 맑아요! 모자도 선크림도 필요 없죠?',c:[['햇볕이 강하면 자외선 때문에 피부가 상해. 모자 쓰고 선크림 바르고 물도 챙겨.',2],['모자는 쓰고 가.',1],['모자 안 쓰면 집에 못 들어와!',0]],f:'구름이 적은 맑은 날엔 빨래가 잘 마르지만 자외선이 강해요. 모자와 자외선 차단제를 챙겨요.'},
+{t:'강수량 · 비 오는 날',e:'🌧️',bg:['#c5d3e6','#7d93b3'],k:0,q:'비 오는데 우산 없이 웅덩이에서 첨벙첨벙 뛸래요!',c:[['길이 미끄럽고 옷이 젖으면 감기 걸려. 우산 쓰고 장화 신고 천천히 다녀.',2],['우산은 쓰고 가. 너무 젖지 말고!',1],['옷 다 버리잖아! 빨래하는 사람 생각도 해라!',0]],f:'비 오는 날엔 길이 미끄럽고 시야가 나빠 사고가 나기 쉬워요. 우산과 장화를 챙기고 천천히 걸어요.'},
+{t:'강수량 · 눈 오는 날',e:'🌨️',bg:['#eaf2fb','#b7cbe4'],k:1,q:'눈 왔다! 주머니에 손 넣고 뛰어가야지!',c:[['빙판길에서 넘어지면 크게 다쳐. 미끄럼 방지 신발 신고 손은 빼고 천천히 걸어.',2],['조심조심 걸어 다녀.',1],['넘어져서 울어도 몰라!',0]],f:'눈이 오면 길이 얼어 미끄러워요. 미끄럼 방지 신발을 신고, 손은 주머니에서 빼고 천천히 걸어요.'}];
+const K=[['도윤','🧒'],['지우','👧']];
+const R=['아 진짜~ 잔소리 싫어! 😤 (방문 쾅)','네… 알겠어요. (근데 왜 그런지는 잘 모르겠어…)','네~ 알겠어요! {P} 말이 맞네요. 😊'];
+const $=document.getElementById('app');let i=0,sc=0,P='엄마';
+const tp=s=>s.replace(/\{P\}/g,P);
+const meter=()=>`<div class="meta"><span>잔소리 효과 📣 ${sc}</span><div class="bar"><i style="width:${sc/20*100}%"></i></div></div>`;
+function start(){$.innerHTML=`<div class="w"><div class="sky" style="background:linear-gradient(#ffe9c7,#ffc9c9)">🏡</div><h1>잔소리</h1><p class="sub">(하나부터 열까지 다 널 위한 소리)</p><div class="box" style="margin-top:14px"><div class="name">게임 방법</div><p>날씨 때문에 아이들이 엉뚱한 말을 해요. 어떤 잔소리를 할지 골라 보세요. 이유를 알려 주는 잔소리가 제일 잘 통해요!</p><p style="margin-top:10px">누가 되어 볼까요?</p><button class="nx" data-p="엄마">엄마</button> <button class="nx" data-p="아빠">아빠</button></div></div>`;
+document.querySelectorAll('.nx').forEach(b=>b.onclick=()=>{P=b.dataset.p;i=0;sc=0;scene()})}
+function scene(){const s=S[i],c=[...s.c].sort(()=>Math.random()-.5),[n,a]=K[s.k];
+$.innerHTML=`<div class="w"><div class="sky" style="background:linear-gradient(${s.bg[0]},${s.bg[1]})"><span class="tag">${i+1}/10 · ${s.t}</span>${s.e}<div class="who">${a}</div></div>${meter()}<div class="box"><div class="name">${n}</div><p id="tx">${tp(s.q)}<br><small>→ ${P}는 어떤 잔소리를 할까요?</small></p><div id="cs">${c.map((x,j)=>`<button class="ch" data-k="${j}">${x[0]}</button>`).join('')}</div></div></div>`;
+document.querySelectorAll('.ch').forEach(b=>b.onclick=()=>pick(c,+b.dataset.k,s))}
+function pick(c,k,s){const p=c[k][1];sc+=p;
+document.querySelectorAll('.ch').forEach((b,j)=>{b.disabled=true;b.style.cursor='default';if(c[j][1]==2)b.classList.add('best');if(j==k)b.classList.add('pick')});
+document.querySelector('.meta').outerHTML=meter();
+document.getElementById('tx').innerHTML=`${tp(R[p])}<br><small>💡 ${s.f}</small>`;
+const n=document.createElement('button');n.className='nx r';n.textContent=i<9?'다음 상황':'결과 보기';
+n.onclick=()=>{i++;i<10?scene():end()};document.getElementById('cs').after(n);n.focus()}
+function end(){const r=sc>=16?['🏆','잔소리 마스터',`${P} 잔소리는 다 이유가 있었네요. 고마워요, 사랑해요! 💗`]:sc>=9?['😊','잔소리 초보','이유를 조금만 더 알려 주면 아이들이 더 잘 들을 거예요.']:['😵','잔소리 폭주','화만 내면 아이들 마음의 문이 닫혀요. 다시 도전해 볼까요?'];
+$.innerHTML=`<div class="w"><div class="sky" style="background:linear-gradient(#ffe9c7,#ffc9c9)">${r[0]}</div>${meter()}<div class="box"><div class="name">도윤 · 지우</div><h2>${r[1]}</h2><p>${r[2]}</p><button class="nx r" id="re">다시 하기</button></div></div>`;
+document.getElementById('re').onclick=start}
+start();
+</script></body></html>
